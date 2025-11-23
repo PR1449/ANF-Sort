@@ -14,25 +14,25 @@ struct Arr {
 std::string build_line(int l, int l0, const std::string& vec) {
   if (l == 0) {
     return "";
-  } else {
-    std::string line = "";
-    for (int i = 0; i < l - 1; i++) {
-      line += std::to_string((vec[i] - '0' + vec[i + 1] - '0') % 2);
-    }
-    std::string v = line;
-    std::string spaced_line(l0 - l + 1, ' ');
-    for (size_t i = 0; i < line.size(); ++i) {
-      spaced_line += line[i];
-      if (i != line.size() - 1) spaced_line += ' ';
-    }
-    spaced_line += std::string(l0 - l + 1, ' ') + '\n';
-    return spaced_line + build_line(l - 1, l0, v);
   }
+  std::string line;
+  for (int i = 0; i < l - 1; i++) {
+    line += std::to_string((vec[i] - '0' + vec[i + 1] - '0') % 2);
+  }
+  std::string v = line;
+  std::string spaced_line(l0 - l + 1, ' ');
+  for (size_t i = 0; i < line.size(); ++i) {
+    spaced_line += line[i];
+    if (i != line.size() - 1)
+      spaced_line += ' ';
+  }
+  spaced_line += std::string(l0 - l + 1, ' ') + '\n';
+  return spaced_line + build_line(l - 1, l0, v);
 }
 
 std::string build_pascal_triangle(int l0, const std::string& f_vec) {
   std::string pascal_triangle = f_vec + '\n' + build_line(l0, l0, f_vec);
-  std::string target = "";
+  std::string target;
   size_t pos = 0, end;
   while ((end = pascal_triangle.find('\n', pos)) != std::string::npos) {
     std::string line = pascal_triangle.substr(pos, end - pos);
@@ -45,46 +45,40 @@ std::string build_pascal_triangle(int l0, const std::string& f_vec) {
   return target;
 }
 
-std::string ANF(const std::string& f_vec) {
+long long ANF_special_number(const std::string& f_vec) {
   int k = 3;
-  std::string ans = "";
+  std::string anf;
+  int degree = 0;
   int l0 = static_cast<int>(std::pow(2, k));
   std::string target = build_pascal_triangle(l0, f_vec);
-
   for (size_t i = 0; i < target.size(); i++) {
     if (target[i] == '1') {
-      if (!ans.empty()) {
-        ans += " ^ ";  // Используем ^ вместо ⊕ для совместимости
+      if (!anf.empty()) {
+        anf += " ^ ";  // Используем ^ вместо ⊕ для совместимости
       }
       if (i == 0) {
-        ans += "1";
+        anf += "1";
       } else {
         std::string args_input = std::bitset<32>(i).to_string().substr(32 - k, k);
-        std::string conjunction = "";
+        std::string conjunction;
         for (int j = 0; j < k; j++) {
           if (args_input[j] == '1') {
             conjunction += "x" + std::to_string(j + 1);
           }
         }
-        ans += conjunction;
+        anf += conjunction;
+        degree = std::max(degree, static_cast<int>(conjunction.length()));
       }
     }
   }
-  if (ans.empty()) {
-    ans = "0";
+  if (anf.empty()) {
+    anf = "0";
   }
-  return ans;
-}
-
-
-int build_special_number(std::string anf) {
   std::string::difference_type n = std::count(anf.begin(), anf.end(), ' ');
   n = n / 2 + 1;
+  n += degree;
   return n;
 }
-
-
-
 
 
 void Merge(int* arr, int n, int len, int* result) {
@@ -139,8 +133,7 @@ int main() {
   for (int i = 0; i < n; ++i) {
     std::cin >> num;
     std::string v = std::bitset<128>(num).to_string().substr(120, 8);
-    v = ANF(v);
-    build_special_number(v);
+    
     arr[i] = num;
   }
   MergeSort(arr, n);
