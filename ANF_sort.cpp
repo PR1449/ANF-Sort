@@ -5,11 +5,9 @@
 #include <algorithm>
 
 struct Arr {
-  int special_num;
-  int original_value;
+  int special_num{};
+  int original_value{};
 };
-
-
 
 std::string build_line(int l, int l0, const std::string& vec) {
   if (l == 0) {
@@ -45,7 +43,7 @@ std::string build_pascal_triangle(int l0, const std::string& f_vec) {
   return target;
 }
 
-long long ANF_special_number(const std::string& f_vec) {
+int ANF_special_number(const std::string& f_vec) {
   int k = 3;
   std::string anf;
   int degree = 0;
@@ -76,18 +74,18 @@ long long ANF_special_number(const std::string& f_vec) {
   }
   std::string::difference_type n = std::count(anf.begin(), anf.end(), ' ');
   n = n / 2 + 1;
-  n += degree;
-  return n;
+  n += degree / 2;
+  std::cout << anf << ' ' << n << '\n';
+  return static_cast<int>(n);
 }
 
-
-void Merge(int* arr, int n, int len, int* result) {
+void Merge(Arr* arr, int n, int len, Arr* result) {
   int right = 0;
   int left = 0;
   auto a = arr;
   auto b = arr + len;
   while (left < len && right < n - len) {
-    if (a[left] <= b[right]) {
+    if (a[left].special_num <= b[right].special_num) {
       result[left + right] = a[left];
       left++;
     } else {
@@ -108,7 +106,7 @@ void Merge(int* arr, int n, int len, int* result) {
   }
 }
 
-int* RecursiveMergeSort(int* arr, int n, int* buffer) {
+Arr* RecursiveMergeSort(Arr* arr, int n, Arr* buffer) {
   if (n <= 1) {
     return arr;
   }
@@ -119,9 +117,9 @@ int* RecursiveMergeSort(int* arr, int n, int* buffer) {
   return arr;
 }
 
-void MergeSort(int* arr, int n) {
-  auto* buffer = new int[n];
-  arr = RecursiveMergeSort(arr, n, buffer);
+void MergeSort(Arr* arr, int n) {
+  auto* buffer = new Arr[n];
+  RecursiveMergeSort(arr, n, buffer);
   delete[] buffer;
 }
 
@@ -129,17 +127,17 @@ int main() {
   int n = 0;
   int num = 0;
   std::cin >> n;
-  auto* arr = new int[n];
+  auto* arr = new Arr[n];
   for (int i = 0; i < n; ++i) {
     std::cin >> num;
     std::string v = std::bitset<128>(num).to_string().substr(120, 8);
-    
-    arr[i] = num;
+    arr[i].original_value = num;
+    arr[i].special_num = ANF_special_number(v);
   }
   MergeSort(arr, n);
   std::cout << '\n';
   for (int i = 0; i < n; i++) {
-    std::cout << arr[i] << " ";
+    std::cout << arr[i].original_value << " ";
   }
   delete[] arr;
 }
