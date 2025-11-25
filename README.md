@@ -12,3 +12,4 @@
 4) Вычисляется special_num
 #### Реализована структура Arr, в которой содержатся вводимые пользователям значения для сортировки (original_value) и значения специальных чисел.
 #### MergeSort сортирует special_num. Выводятся отсортированные элементы original_value. 
+<img width="438" height="436" alt="image" src="https://github.com/user-attachments/assets/2e15a070-ffb6-4d64-afab-c72fceed872d" />
