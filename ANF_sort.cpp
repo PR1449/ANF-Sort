@@ -3,6 +3,7 @@
 #include <bitset>
 #include <cmath>
 #include <algorithm>
+#include <windows.h>
 
 struct Arr {
   int special_num{};
@@ -52,7 +53,7 @@ int ANF_special_number(const std::string& f_vec) {
   for (size_t i = 0; i < target.size(); i++) {
     if (target[i] == '1') {
       if (!anf.empty()) {
-        anf += " ^ ";  // Используем ^ вместо ⊕ для совместимости
+        anf += " ⊕ ";
       }
       if (i == 0) {
         anf += "1";
@@ -75,7 +76,7 @@ int ANF_special_number(const std::string& f_vec) {
   std::string::difference_type n = std::count(anf.begin(), anf.end(), ' ');
   n = n / 2 + 1;
   n += degree / 2;
-  std::cout << anf << ' ' << n << '\n';
+  // std::cout << anf << ' ' << n << '\n';
   return static_cast<int>(n);
 }
 
@@ -124,6 +125,11 @@ void MergeSort(Arr* arr, int n) {
 }
 
 int main() {
+  std::locale::global(std::locale(""));
+ #ifdef _WIN32
+  SetConsoleOutputCP(CP_UTF8);
+ #endif
+
   int n = 0;
   int num = 0;
   std::cin >> n;
