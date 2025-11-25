@@ -29,7 +29,7 @@ std::string build_line(int l, int l0, const std::string& vec) {
   return spaced_line + build_line(l - 1, l0, v);
 }
 
-std::string build_pascal_triangle(int l0, const std::string& f_vec) {
+std::string pascal_triangle(int l0, const std::string& f_vec) {
   std::string pascal_triangle = f_vec + '\n' + build_line(l0, l0, f_vec);
   std::string target;
   size_t pos = 0, end;
@@ -49,7 +49,7 @@ int ANF_special_number(const std::string& f_vec) {
   std::string anf;
   int degree = 0;
   int l0 = static_cast<int>(std::pow(2, k));
-  std::string target = build_pascal_triangle(l0, f_vec);
+  std::string target = pascal_triangle(l0, f_vec);
   for (size_t i = 0; i < target.size(); i++) {
     if (target[i] == '1') {
       if (!anf.empty()) {
