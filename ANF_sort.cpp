@@ -3,7 +3,7 @@
 #include <bitset>
 #include <cmath>
 #include <algorithm>
-#include <windows.h>
+#include <windows.h>    // используется для вывода символа ⊕ в 79 строке
 
 struct Arr {
   int special_num{};
@@ -146,4 +146,5 @@ int main() {
     std::cout << arr[i].original_value << " ";
   }
   delete[] arr;
+
 }
